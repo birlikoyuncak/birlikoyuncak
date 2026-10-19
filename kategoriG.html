@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yeni Gelen Ürünler - Birlik Oyuncak</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #1a252f;
+            color: #fff;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .top-bar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar a {
+            color: #ffca28;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 18px 0;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo a {
+            text-decoration: none;
+        }
+
+        .logo h1 {
+            color: #d32f2f;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #1976d2;
+        }
+
+        /* Arama Kutusu */
+        .search-box {
+            flex-grow: 1;
+            max-width: 650px;
+            display: flex;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border: 2px solid #d32f2f;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            bottom: 4px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Navbar / Kategoriler */
+        nav {
+            background-color: #d32f2f;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-container li a {
+            display: block;
+            padding: 12px 18px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-container li a:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* Sayfa/Kategori Başlığı */
+        .category-header {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-header h2 {
+            font-size: 1.5rem;
+            color: #d32f2f;
+        }
+
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        /* Ürün Grid (4 Sütun x 5 Satır = 20 Ürün) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Ürün Kartı */
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .badge-discount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #388e3c;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #fafafa;
+        }
+
+        .product-details {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            height: 2.6em;
+            overflow: hidden;
+        }
+
+        .product-price-box {
+            margin-top: auto;
+            margin-bottom: 12px;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #9e9e9e;
+            font-size: 0.85rem;
+            margin-right: 6px;
+        }
+
+        .current-price {
+            color: #d32f2f;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 9px 0;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-add-cart:hover {
+            background-color: #1565c0;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a252f;
+            color: #b0bec5;
+            padding: 25px 0;
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85rem;
+            border-top: 1px solid #37474f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <span>Toptan ve Perakende Ürün Satış Sitemiz</span>
+            <span>Destek: <a href="tel:05555555555">0555 555 55 55</a></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html"><h1>BİRLİK<span>OYUNCAK</span></h1></a>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Yeni gelen ürünlerde ara..." onkeyup="filterProducts()">
+                <button type="button">Ara</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul class="nav-container">
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="kategoriA.html">Aksesuar - Anahtarlık</a></li>
+            <li><a href="kategoriB.html">Ev Yaşam Ofis</a></li>
+            <li><a href="kategoriC.html">Figür Oyuncak Hobi</a></li>
+            <li><a href="kategoriD.html">Hediyelik</a></li>
+            <li><a href="kategoriE.html">Kırtasiye</a></li>
+            <li><a href="kategoriF.html">Masa Gece Lambası Aydınlatma</a></li>
+            <li><a href="kategoriG.html">Yeni Gelen Ürünler</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Kategori Başlığı ve Yol -->
+        <div class="category-header">
+            <h2>Yeni Gelen Ürünler - Ürün Listesi</h2>
+            <div class="breadcrumb">
+                <a href="index.html">Ana Sayfa</a> / <span>Yeni Gelen Ürünler</span>
+            </div>
+        </div>
+
+        <!-- Ürün Grid (20 Adet Ürün) -->
+        <div class="products-grid" id="productGrid">
+
+            <!-- Ürün 1 -->
+            <a href="urun-detay.html?id=121" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&auto=format&fit=crop&q=60" class="product-image" alt="LED Işıklı Katlanabilir Şeffaf Kitap Okuma Paneli">
+                <div class="product-details">
+                    <h4 class="product-title">LED Işıklı Katlanabilir Şeffaf Kitap Okuma Paneli</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">220 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 2 -->
+            <a href="urun-detay.html?id=122" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=500&auto=format&fit=crop&q=60" class="product-image" alt="USB Şarjlı Dijital Göstergeli Mini Masaüstü Fan">
+                <div class="product-details">
+                    <h4 class="product-title">USB Şarjlı Dijital Göstergeli Mini Masaüstü Fan</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">270 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 3 -->
+            <a href="urun-detay.html?id=123" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Otomatik Karıştırıcılı Termos Kupa Bardak">
+                <div class="product-details">
+                    <h4 class="product-title">Otomatik Karıştırıcılı Termos Kupa Bardak</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">320 TL</span>
+                        <span class="current-price">280 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 4 -->
+            <a href="urun-detay.html?id=124" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=60" class="product-image" alt="ATM Şifreli Sesli Otomatik Para Çeken Kumbara">
+                <div class="product-details">
+                    <h4 class="product-title">ATM Şifreli Sesli Otomatik Para Çeken Kumbara</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">350 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 5 -->
+            <a href="urun-detay.html?id=125" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1545454675-3531b543be5d?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Kablosuz Şarj Destekli Bluetooth Hoparlörlü Lamba">
+                <div class="product-details">
+                    <h4 class="product-title">Kablosuz Şarj Destekli Bluetooth Hoparlörlü Lamba</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">490 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 6 -->
+            <a href="urun-detay.html?id=126" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Manyetik Demir Tozlu Dekoratif Kum Saati">
+                <div class="product-details">
+                    <h4 class="product-title">Manyetik Demir Tozlu Dekoratif Kum Saati</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">180 TL</span>
+                        <span class="current-price">150 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 7 -->
+            <a href="urun-detay.html?id=127" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Piksel Ekranlı Akıllı Masaüstü Saat ve Bildirim Ekranı">
+                <div class="product-details">
+                    <h4 class="product-title">Piksel Ekranlı Akıllı Masaüstü Saat ve Bildirim Ekranı</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">580 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 8 -->
+            <a href="urun-detay.html?id=128" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Akrilik LED Işıklı Yazılıp Silinebilir Not Pano Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Akrilik LED Işıklı Yazılıp Silinebilir Not Pano Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">190 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 9 -->
+            <a href="urun-detay.html?id=129" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Alev Efektli Hava Nemlendirici Oda Kokusu Makinesi">
+                <div class="product-details">
+                    <h4 class="product-title">Alev Efektli Hava Nemlendirici Oda Kokusu Makinesi</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">420 TL</span>
+                        <span class="current-price">360 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 10 -->
+            <a href="urun-detay.html?id=130" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Yerçekimsiz Su Damlası Görünümlü Hava Nemlendirici">
+                <div class="product-details">
+                    <h4 class="product-title">Yerçekimsiz Su Damlası Görünümlü Hava Nemlendirici</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">450 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 11 -->
+            <a href="urun-detay.html?id=131" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Havada Dönen Manyetik Levitasyonlu Dünya Küresi">
+                <div class="product-details">
+                    <h4 class="product-title">Havada Dönen Manyetik Levitasyonlu Dünya Küresi</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">650 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 12 -->
+            <a href="urun-detay.html?id=132" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="400 Oyunlu Mini Taşınabilir El Atarisi">
+                <div class="product-details">
+                    <h4 class="product-title">400 Oyunlu Mini Taşınabilir El Atarisi</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">250 TL</span>
+                        <span class="current-price">210 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 13 -->
+            <a href="urun-detay.html?id=133" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Sevimli Ekmek Tasarımlı Silikon Dokunmatik Lamba">
+                <div class="product-details">
+                    <h4 class="product-title">Sevimli Ekmek Tasarımlı Silikon Dokunmatik Lamba</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">175 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 14 -->
+            <a href="urun-detay.html?id=134" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Pilli Mini Masaüstü Silgi ve Toz Süpürgesi">
+                <div class="product-details">
+                    <h4 class="product-title">Pilli Mini Masaüstü Silgi ve Toz Süpürgesi</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">130 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 15 -->
+            <a href="urun-detay.html?id=135" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?w=500&auto=format&fit=crop&q=60" class="product-image" alt="3D Dinamik Kum Tablosu Hareketli Kum Manzarası">
+                <div class="product-details">
+                    <h4 class="product-title">3D Dinamik Kum Tablosu Hareketli Kum Manzarası</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">290 TL</span>
+                        <span class="current-price">245 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 16 -->
+            <a href="urun-detay.html?id=136" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500&auto=format&fit=crop&q=60" class="product-image" alt="NFC ve QR Kod Bağlantılı Akıllı Başucu Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">NFC ve QR Kod Bağlantılı Akıllı Başucu Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">310 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 17 -->
+            <a href="urun-detay.html?id=137" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1589118949245-7d38baf380d6?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Pop-It Stres Çözücü Işıklı Sesli Oyuncak Anahtarlık">
+                <div class="product-details">
+                    <h4 class="product-title">Pop-It Stres Çözücü Işıklı Sesli Oyuncak Anahtarlık</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">95 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 18 -->
+            <a href="urun-detay.html?id=138" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Araç Klima Çıkışına Takılan Mini Pikap Koku">
+                <div class="product-details">
+                    <h4 class="product-title">Araç Klima Çıkışına Takılan Mini Pikap Koku</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">140 TL</span>
+                        <span class="current-price">112 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 19 -->
+            <a href="urun-detay.html?id=139" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Kamera Lens Tasarımlı Termos Kupa Bardak">
+                <div class="product-details">
+                    <h4 class="product-title">Kamera Lens Tasarımlı Termos Kupa Bardak</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">230 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 20 -->
+            <a href="urun-detay.html?id=140" class="product-card">
+                <span class="badge-discount">YENİ</span>
+                <img src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500&auto=format&fit=crop&q=60" class="product-image" alt="3D Derinlik Efektli Aynalı Işıklı Çerçeve">
+                <div class="product-details">
+                    <h4 class="product-title">3D Derinlik Efektli Aynalı Işıklı Çerçeve</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">260 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <div class="no-results" id="noResults">Aradığınız kriterlere uygun ürün bulunamadı.</div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 Birlik Oyuncak - Tüm Hakları Saklıdır.
+    </footer>
+
+    <!-- Arama Fonksiyonu -->
+    <script>
+        function filterProducts() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.getElementsByClassName('product-card');
+            let hasVisibleCard = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].querySelector('.product-title').innerText.toLowerCase();
+
+                if (title.includes(input)) {
+                    cards[i].style.display = "";
+                    hasVisibleCard = true;
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+
+            const noResults = document.getElementById('noResults');
+            noResults.style.display = hasVisibleCard ? "none" : "block";
+        }
+    </script>
+</body>
+</html>

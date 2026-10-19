@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figür Oyuncak Hobi - Birlik Oyuncak</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #1a252f;
+            color: #fff;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .top-bar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar a {
+            color: #ffca28;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 18px 0;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo a {
+            text-decoration: none;
+        }
+
+        .logo h1 {
+            color: #d32f2f;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #1976d2;
+        }
+
+        /* Arama Kutusu */
+        .search-box {
+            flex-grow: 1;
+            max-width: 650px;
+            display: flex;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border: 2px solid #d32f2f;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            bottom: 4px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Navbar / Kategoriler */
+        nav {
+            background-color: #d32f2f;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-container li a {
+            display: block;
+            padding: 12px 18px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-container li a:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* Sayfa/Kategori Başlığı */
+        .category-header {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-header h2 {
+            font-size: 1.5rem;
+            color: #d32f2f;
+        }
+
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        /* Ürün Grid (4 Sütun x 5 Satır = 20 Ürün) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Ürün Kartı */
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .badge-discount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #d32f2f;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #fafafa;
+        }
+
+        .product-details {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            height: 2.6em;
+            overflow: hidden;
+        }
+
+        .product-price-box {
+            margin-top: auto;
+            margin-bottom: 12px;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #9e9e9e;
+            font-size: 0.85rem;
+            margin-right: 6px;
+        }
+
+        .current-price {
+            color: #d32f2f;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 9px 0;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-add-cart:hover {
+            background-color: #1565c0;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a252f;
+            color: #b0bec5;
+            padding: 25px 0;
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85rem;
+            border-top: 1px solid #37474f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <span>Toptan ve Perakende Ürün Satış Sitemiz</span>
+            <span>Destek: <a href="tel:05555555555">0555 555 55 55</a></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html"><h1>BİRLİK<span>OYUNCAK</span></h1></a>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Figür Oyuncak Hobi ürünlerinde ara..." onkeyup="filterProducts()">
+                <button type="button">Ara</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul class="nav-container">
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="kategoriA.html">Aksesuar - Anahtarlık</a></li>
+            <li><a href="kategoriB.html">Ev Yaşam Ofis</a></li>
+            <li><a href="kategoriC.html">Figür Oyuncak Hobi</a></li>
+            <li><a href="kategoriD.html">Hediyelik</a></li>
+            <li><a href="kategoriE.html">Kırtasiye</a></li>
+            <li><a href="kategoriF.html">Masa Gece Lambası Aydınlatma</a></li>
+            <li><a href="kategoriG.html">Yeni Gelen Ürünler</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Kategori Başlığı ve Yol -->
+        <div class="category-header">
+            <h2>Figür Oyuncak Hobi - Ürün Listesi</h2>
+            <div class="breadcrumb">
+                <a href="index.html">Ana Sayfa</a> / <span>Figür Oyuncak Hobi</span>
+            </div>
+        </div>
+
+        <!-- Ürün Grid (20 Adet Ürün) -->
+        <div class="products-grid" id="productGrid">
+
+            <!-- Ürün 1 -->
+            <a href="urun-detay.html?id=41" class="product-card">
+                <span class="badge-discount">%20 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Özel Koleksiyon Anime Figürü 15cm">
+                <div class="product-details">
+                    <h4 class="product-title">Özel Koleksiyon Anime Figürü 15cm</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">380 TL</span>
+                        <span class="current-price">304 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 2 -->
+            <a href="urun-detay.html?id=42" class="product-card">
+                <img src="https://images.unsplash.com/photo-1607613009820-a29f7bb81c04?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Süper Kahraman Hareketli Aksiyon Figürü">
+                <div class="product-details">
+                    <h4 class="product-title">Süper Kahraman Hareketli Aksiyon Figürü</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">290 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 3 -->
+            <a href="urun-detay.html?id=43" class="product-card">
+                <span class="badge-discount">%15 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1581235720704-06d3acfcb36f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="1:24 Scale Diecast Metal Koleksiyon Arabası">
+                <div class="product-details">
+                    <h4 class="product-title">1:24 Scale Diecast Metal Koleksiyon Arabası</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">450 TL</span>
+                        <span class="current-price">382 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 4 -->
+            <a href="urun-detay.html?id=44" class="product-card">
+                <img src="https://images.unsplash.com/photo-1544816155-12df9643f363?w=500&auto=format&fit=crop&q=60" class="product-image" alt="3D Ahşap Yapboz Maket Gemi Seti">
+                <div class="product-details">
+                    <h4 class="product-title">3D Ahşap Yapboz Maket Gemi Seti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">220 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 5 -->
+            <a href="urun-detay.html?id=45" class="product-card">
+                <img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Masaüstü Sallanan Başlı Mini Figür">
+                <div class="product-details">
+                    <h4 class="product-title">Masaüstü Sallanan Başlı Mini Figür</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">140 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 6 -->
+            <a href="urun-detay.html?id=46" class="product-card">
+                <span class="badge-discount">%10 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Gerçekçi Sesli ve Işıklı Dinozor Figürü">
+                <div class="product-details">
+                    <h4 class="product-title">Gerçekçi Sesli ve Işıklı Dinozor Figürü</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">310 TL</span>
+                        <span class="current-price">279 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 7 -->
+            <a href="urun-detay.html?id=47" class="product-card">
+                <img src="https://images.unsplash.com/photo-1582211594533-268f4f1edcef?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Akrilik Figür Sergileme ve Koruma Vitrini">
+                <div class="product-details">
+                    <h4 class="product-title">Akrilik Figür Sergileme ve Koruma Vitrini</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">260 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 8 -->
+            <a href="urun-detay.html?id=48" class="product-card">
+                <img src="https://images.unsplash.com/photo-1533738363-b7f9aef128ce?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Dönüşebilen Değiştirilebilir Robot Figür">
+                <div class="product-details">
+                    <h4 class="product-title">Dönüşebilen Değiştirilebilir Robot Figür</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">195 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 9 -->
+            <a href="urun-detay.html?id=49" class="product-card">
+                <span class="badge-discount">%25 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=500&auto=format&fit=crop&q=60" class="product-image" alt="6'lı Mini Oyun Karakterleri Figür Seti">
+                <div class="product-details">
+                    <h4 class="product-title">6'lı Mini Oyun Karakterleri Figür Seti</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">400 TL</span>
+                        <span class="current-price">300 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 10 -->
+            <a href="urun-detay.html?id=50" class="product-card">
+                <img src="https://images.unsplash.com/photo-1589254065878-42c9da997008?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Savaş Uçağı Plastik Maket Yapım Kiti">
+                <div class="product-details">
+                    <h4 class="product-title">Savaş Uçağı Plastik Maket Yapım Kiti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">240 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 11 -->
+            <a href="urun-detay.html?id=51" class="product-card">
+                <img src="https://images.unsplash.com/photo-1591991731833-b4807cf7ef94?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Piksel Blok Karakter Serisi Figür">
+                <div class="product-details">
+                    <h4 class="product-title">Piksel Blok Karakter Serisi Figür</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">125 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 12 -->
+            <a href="urun-detay.html?id=52" class="product-card">
+                <span class="badge-discount">%20 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Klasik Nostaljik Metal Araba Maketi">
+                <div class="product-details">
+                    <h4 class="product-title">Klasik Nostaljik Metal Araba Maketi</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">350 TL</span>
+                        <span class="current-price">280 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 13 -->
+            <a href="urun-detay.html?id=53" class="product-card">
+                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Detaylı Büyülü Ejderha Figürü 20cm">
+                <div class="product-details">
+                    <h4 class="product-title">Detaylı Büyülü Ejderha Figürü 20cm</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">340 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 14 -->
+            <a href="urun-detay.html?id=54" class="product-card">
+                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Sürpriz Kutulu Koleksiyon Mini Figür">
+                <div class="product-details">
+                    <h4 class="product-title">Sürpriz Kutulu Koleksiyon Mini Figür</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">90 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 15 -->
+            <a href="urun-detay.html?id=55" class="product-card">
+                <span class="badge-discount">%10 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Metal Nostaljik Lokomotif Tren Maketi">
+                <div class="product-details">
+                    <h4 class="product-title">Metal Nostaljik Lokomotif Tren Maketi</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">270 TL</span>
+                        <span class="current-price">243 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 16 -->
+            <a href="urun-detay.html?id=56" class="product-card">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Mitolojik Savaşçı Dekoratif Figür">
+                <div class="product-details">
+                    <h4 class="product-title">Mitolojik Savaşçı Dekoratif Figür</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">310 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 17 -->
+            <a href="urun-detay.html?id=57" class="product-card">
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Maket Boyama ve Fırça Hobi Başlangıç Seti">
+                <div class="product-details">
+                    <h4 class="product-title">Maket Boyama ve Fırça Hobi Başlangıç Seti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">180 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 18 -->
+            <a href="urun-detay.html?id=58" class="product-card">
+                <span class="badge-discount">%30 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Uzay Mekiği ve Astronot Maket Seti">
+                <div class="product-details">
+                    <h4 class="product-title">Uzay Mekiği ve Astronot Maket Seti</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">300 TL</span>
+                        <span class="current-price">210 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 19 -->
+            <a href="urun-detay.html?id=59" class="product-card">
+                <img src="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?w=500&auto=format&fit=crop&q=60" class="product-image" alt="1:18 Ölçekli Diecast Motosiklet Maketi">
+                <div class="product-details">
+                    <h4 class="product-title">1:18 Ölçekli Diecast Motosiklet Maketi</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">230 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 20 -->
+            <a href="urun-detay.html?id=60" class="product-card">
+                <img src="https://images.unsplash.com/photo-1580273916550-e323be2ae537?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Silah ve Zırh Aksesuarlı Savaşçı Figür">
+                <div class="product-details">
+                    <h4 class="product-title">Silah ve Zırh Aksesuarlı Savaşçı Figür</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">360 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <div class="no-results" id="noResults">Aradığınız kriterlere uygun ürün bulunamadı.</div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 Birlik Oyuncak - Tüm Hakları Saklıdır.
+    </footer>
+
+    <!-- Arama Fonksiyonu -->
+    <script>
+        function filterProducts() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.getElementsByClassName('product-card');
+            let hasVisibleCard = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].querySelector('.product-title').innerText.toLowerCase();
+
+                if (title.includes(input)) {
+                    cards[i].style.display = "";
+                    hasVisibleCard = true;
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+
+            const noResults = document.getElementById('noResults');
+            noResults.style.display = hasVisibleCard ? "none" : "block";
+        }
+    </script>
+</body>
+</html>

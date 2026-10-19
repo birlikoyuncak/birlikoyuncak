@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kırtasiye - Birlik Oyuncak</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #1a252f;
+            color: #fff;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .top-bar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar a {
+            color: #ffca28;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 18px 0;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo a {
+            text-decoration: none;
+        }
+
+        .logo h1 {
+            color: #d32f2f;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #1976d2;
+        }
+
+        /* Arama Kutusu */
+        .search-box {
+            flex-grow: 1;
+            max-width: 650px;
+            display: flex;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border: 2px solid #d32f2f;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            bottom: 4px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Navbar / Kategoriler */
+        nav {
+            background-color: #d32f2f;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-container li a {
+            display: block;
+            padding: 12px 18px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-container li a:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* Sayfa/Kategori Başlığı */
+        .category-header {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-header h2 {
+            font-size: 1.5rem;
+            color: #d32f2f;
+        }
+
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        /* Ürün Grid (4 Sütun x 5 Satır = 20 Ürün) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Ürün Kartı */
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .badge-discount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #d32f2f;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #fafafa;
+        }
+
+        .product-details {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            height: 2.6em;
+            overflow: hidden;
+        }
+
+        .product-price-box {
+            margin-top: auto;
+            margin-bottom: 12px;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #9e9e9e;
+            font-size: 0.85rem;
+            margin-right: 6px;
+        }
+
+        .current-price {
+            color: #d32f2f;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 9px 0;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-add-cart:hover {
+            background-color: #1565c0;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a252f;
+            color: #b0bec5;
+            padding: 25px 0;
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85rem;
+            border-top: 1px solid #37474f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <span>Toptan ve Perakende Ürün Satış Sitemiz</span>
+            <span>Destek: <a href="tel:05555555555">0555 555 55 55</a></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html"><h1>BİRLİK<span>OYUNCAK</span></h1></a>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Kırtasiye ürünlerinde ara..." onkeyup="filterProducts()">
+                <button type="button">Ara</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul class="nav-container">
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="kategoriA.html">Aksesuar - Anahtarlık</a></li>
+            <li><a href="kategoriB.html">Ev Yaşam Ofis</a></li>
+            <li><a href="kategoriC.html">Figür Oyuncak Hobi</a></li>
+            <li><a href="kategoriD.html">Hediyelik</a></li>
+            <li><a href="kategoriE.html">Kırtasiye</a></li>
+            <li><a href="kategoriF.html">Masa Gece Lambası Aydınlatma</a></li>
+            <li><a href="kategoriG.html">Yeni Gelen Ürünler</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Kategori Başlığı ve Yol -->
+        <div class="category-header">
+            <h2>Kırtasiye - Ürün Listesi</h2>
+            <div class="breadcrumb">
+                <a href="index.html">Ana Sayfa</a> / <span>Kırtasiye</span>
+            </div>
+        </div>
+
+        <!-- Ürün Grid (20 Adet Ürün) -->
+        <div class="products-grid" id="productGrid">
+
+            <!-- Ürün 1 -->
+            <a href="urun-detay.html?id=81" class="product-card">
+                <span class="badge-discount">%10 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500&auto=format&fit=crop&q=60" class="product-image" alt="12'li Renkli Jel Mürekkep Kalem Seti">
+                <div class="product-details">
+                    <h4 class="product-title">12'li Renkli Jel Mürekkep Kalem Seti</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">150 TL</span>
+                        <span class="current-price">135 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 2 -->
+            <a href="urun-detay.html?id=82" class="product-card">
+                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Spiralli Sert Kapak A5 Çizgili Defter">
+                <div class="product-details">
+                    <h4 class="product-title">Spiralli Sert Kapak A5 Çizgili Defter</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">90 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 3 -->
+            <a href="urun-detay.html?id=83" class="product-card">
+                <span class="badge-discount">%15 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Çok Bölmeli Kumaş Okul Kalemliği">
+                <div class="product-details">
+                    <h4 class="product-title">Çok Bölmeli Kumaş Okul Kalemliği</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">120 TL</span>
+                        <span class="current-price">102 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 4 -->
+            <a href="urun-detay.html?id=84" class="product-card">
+                <img src="https://images.unsplash.com/photo-1569683795645-b62e50fbf103?w=500&auto=format&fit=crop&q=60" class="product-image" alt="6'lı Pastel Renk Fosforlu İşaretleme Kalemi">
+                <div class="product-details">
+                    <h4 class="product-title">6'lı Pastel Renk Fosforlu İşaretleme Kalemi</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">110 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 5 -->
+            <a href="urun-detay.html?id=85" class="product-card">
+                <img src="https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Ortopedik Sırt Destekli Okul Çantası">
+                <div class="product-details">
+                    <h4 class="product-title">Ortopedik Sırt Destekli Okul Çantası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">450 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 6 -->
+            <a href="urun-detay.html?id=86" class="product-card">
+                <span class="badge-discount">%20 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1513364776144-60967b0f800f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="A4 Kalın Yaprak Spiralli Resim Defteri">
+                <div class="product-details">
+                    <h4 class="product-title">A4 Kalın Yaprak Spiralli Resim Defteri</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">80 TL</span>
+                        <span class="current-price">64 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 7 -->
+            <a href="urun-detay.html?id=87" class="product-card">
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="24 Renkli Metal Kutulu Kuru Boya Seti">
+                <div class="product-details">
+                    <h4 class="product-title">24 Renkli Metal Kutulu Kuru Boya Seti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">180 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 8 -->
+            <a href="urun-detay.html?id=88" class="product-card">
+                <img src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=500&auto=format&fit=crop&q=60" class="product-image" alt="12 Renk Tablet Sulu Boya ve Fırça Seti">
+                <div class="product-details">
+                    <h4 class="product-title">12 Renk Tablet Sulu Boya ve Fırça Seti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">95 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 9 -->
+            <a href="urun-detay.html?id=89" class="product-card">
+                <span class="badge-discount">%25 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Tarihsiz Akademik Haftalık Planlayıcı Ajanda">
+                <div class="product-details">
+                    <h4 class="product-title">Tarihsiz Akademik Haftalık Planlayıcı Ajanda</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">200 TL</span>
+                        <span class="current-price">150 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 10 -->
+            <a href="urun-detay.html?id=90" class="product-card">
+                <img src="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Mini Masaüstü Zımba ve Tel Seti">
+                <div class="product-details">
+                    <h4 class="product-title">Mini Masaüstü Zımba ve Tel Seti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">70 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 11 -->
+            <a href="urun-detay.html?id=91" class="product-card">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&auto=format&fit=crop&q=60" class="product-image" alt="4 Parça Esnek Cetvel ve Gönye Seti">
+                <div class="product-details">
+                    <h4 class="product-title">4 Parça Esnek Cetvel ve Gönye Seti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">60 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 12 -->
+            <a href="urun-detay.html?id=92" class="product-card">
+                <span class="badge-discount">%15 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1544717305-2782549b5136?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Renkli Şeffaf Yapışkanlı Not Kağıdı (Post-it)">
+                <div class="product-details">
+                    <h4 class="product-title">Renkli Şeffaf Yapışkanlı Not Kağıdı (Post-it)</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">65 TL</span>
+                        <span class="current-price">55 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 13 -->
+            <a href="urun-detay.html?id=93" class="product-card">
+                <img src="https://images.unsplash.com/photo-1585336261022-6fc0e2413a1b?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Korumalı Çocuk El İşi Okul Makası">
+                <div class="product-details">
+                    <h4 class="product-title">Korumalı Çocuk El İşi Okul Makası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">45 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 14 -->
+            <a href="urun-detay.html?id=94" class="product-card">
+                <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?w=500&auto=format&fit=crop&q=60" class="product-image" alt="3'lü Paket Yıkanabilir Stick Yapıştırıcı 20g">
+                <div class="product-details">
+                    <h4 class="product-title">3'lü Paket Yıkanabilir Stick Yapıştırıcı 20g</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">85 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 15 -->
+            <a href="urun-detay.html?id=95" class="product-card">
+                <span class="badge-discount">%20 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=500&auto=format&fit=crop&q=60" class="product-image" alt="4 Renkli Oyun Hamuru ve Şekil Seti">
+                <div class="product-details">
+                    <h4 class="product-title">4 Renkli Oyun Hamuru ve Şekil Seti</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">130 TL</span>
+                        <span class="current-price">104 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 16 -->
+            <a href="urun-detay.html?id=96" class="product-card">
+                <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?w=500&auto=format&fit=crop&q=60" class="product-image" alt="A4 Şeffaf Cepli Sunum Dosyası 40 Yaprak">
+                <div class="product-details">
+                    <h4 class="product-title">A4 Şeffaf Cepli Sunum Dosyası 40 Yaprak</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">75 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 17 -->
+            <a href="urun-detay.html?id=97" class="product-card">
+                <img src="https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500&auto=format&fit=crop&q=60" class="product-image" alt="12'li Düzey Dereceli Çizim Kurşun Kalem Seti">
+                <div class="product-details">
+                    <h4 class="product-title">12'li Düzey Dereceli Çizim Kurşun Kalem Seti</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">120 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 18 -->
+            <a href="urun-detay.html?id=98" class="product-card">
+                <span class="badge-discount">%30 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=500&auto=format&fit=crop&q=60" class="product-image" alt="10'lu Dekoratif Desenli Washi Bant Seti">
+                <div class="product-details">
+                    <h4 class="product-title">10'lu Dekoratif Desenli Washi Bant Seti</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">100 TL</span>
+                        <span class="current-price">70 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 19 -->
+            <a href="urun-detay.html?id=99" class="product-card">
+                <img src="https://images.unsplash.com/photo-1583485088034-697b5bc54ccd?w=500&auto=format&fit=crop&q=60" class="product-image" alt="0.7mm Metal Uçlu Versatil Basmalı Kalem">
+                <div class="product-details">
+                    <h4 class="product-title">0.7mm Metal Uçlu Versatil Basmalı Kalem</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">85 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 20 -->
+            <a href="urun-detay.html?id=100" class="product-card">
+                <img src="https://images.unsplash.com/photo-1512314889357-e157c22f938d?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Hazneli Çift Delikli Kalemtıraş ve Silgi">
+                <div class="product-details">
+                    <h4 class="product-title">Hazneli Çift Delikli Kalemtıraş ve Silgi</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">40 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <div class="no-results" id="noResults">Aradığınız kriterlere uygun ürün bulunamadı.</div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 Birlik Oyuncak - Tüm Hakları Saklıdır.
+    </footer>
+
+    <!-- Arama Fonksiyonu -->
+    <script>
+        function filterProducts() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.getElementsByClassName('product-card');
+            let hasVisibleCard = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].querySelector('.product-title').innerText.toLowerCase();
+
+                if (title.includes(input)) {
+                    cards[i].style.display = "";
+                    hasVisibleCard = true;
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+
+            const noResults = document.getElementById('noResults');
+            noResults.style.display = hasVisibleCard ? "none" : "block";
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masa Gece Lambası Aydınlatma - Birlik Oyuncak</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f6f9;
+            color: #333;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background-color: #1a252f;
+            color: #fff;
+            padding: 8px 0;
+            font-size: 0.85rem;
+        }
+
+        .top-bar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar a {
+            color: #ffca28;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Header */
+        header {
+            background-color: #fff;
+            padding: 18px 0;
+            border-bottom: 1px solid #e0e0e0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .logo a {
+            text-decoration: none;
+        }
+
+        .logo h1 {
+            color: #d32f2f;
+            font-size: 1.8rem;
+            font-weight: 800;
+        }
+
+        .logo span {
+            color: #1976d2;
+        }
+
+        /* Arama Kutusu */
+        .search-box {
+            flex-grow: 1;
+            max-width: 650px;
+            display: flex;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            font-size: 0.95rem;
+            border: 2px solid #d32f2f;
+            border-radius: 25px;
+            outline: none;
+        }
+
+        .search-box button {
+            position: absolute;
+            right: 4px;
+            top: 4px;
+            bottom: 4px;
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            padding: 0 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Navbar / Kategoriler */
+        nav {
+            background-color: #d32f2f;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            list-style: none;
+            overflow-x: auto;
+        }
+
+        .nav-container li a {
+            display: block;
+            padding: 12px 18px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .nav-container li a:hover {
+            background-color: #b71c1c;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 15px;
+        }
+
+        /* Sayfa/Kategori Başlığı */
+        .category-header {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .category-header h2 {
+            font-size: 1.5rem;
+            color: #d32f2f;
+        }
+
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .breadcrumb a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        /* Ürün Grid (4 Sütun x 5 Satır = 20 Ürün) */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Ürün Kartı */
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            transition: all 0.2s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .product-card:hover {
+            box-shadow: 0 8px 18px rgba(0,0,0,0.1);
+            transform: translateY(-3px);
+        }
+
+        .badge-discount {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #d32f2f;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 4px;
+            z-index: 2;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background-color: #fafafa;
+        }
+
+        .product-details {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .product-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            line-height: 1.3;
+            height: 2.6em;
+            overflow: hidden;
+        }
+
+        .product-price-box {
+            margin-top: auto;
+            margin-bottom: 12px;
+        }
+
+        .old-price {
+            text-decoration: line-through;
+            color: #9e9e9e;
+            font-size: 0.85rem;
+            margin-right: 6px;
+        }
+
+        .current-price {
+            color: #d32f2f;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .btn-add-cart {
+            width: 100%;
+            background-color: #1976d2;
+            color: white;
+            border: none;
+            padding: 9px 0;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .btn-add-cart:hover {
+            background-color: #1565c0;
+        }
+
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 1.1rem;
+            display: none;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a252f;
+            color: #b0bec5;
+            padding: 25px 0;
+            margin-top: 50px;
+            text-align: center;
+            font-size: 0.85rem;
+            border-top: 1px solid #37474f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="top-bar-container">
+            <span>Toptan ve Perakende Ürün Satış Sitemiz</span>
+            <span>Destek: <a href="tel:05555555555">0555 555 55 55</a></span>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <a href="index.html"><h1>BİRLİK<span>OYUNCAK</span></h1></a>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Aydınlatma ürünlerinde ara..." onkeyup="filterProducts()">
+                <button type="button">Ara</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <ul class="nav-container">
+            <li><a href="index.html">Ana Sayfa</a></li>
+            <li><a href="kategoriA.html">Aksesuar - Anahtarlık</a></li>
+            <li><a href="kategoriB.html">Ev Yaşam Ofis</a></li>
+            <li><a href="kategoriC.html">Figür Oyuncak Hobi</a></li>
+            <li><a href="kategoriD.html">Hediyelik</a></li>
+            <li><a href="kategoriE.html">Kırtasiye</a></li>
+            <li><a href="kategoriF.html">Masa Gece Lambası Aydınlatma</a></li>
+            <li><a href="kategoriG.html">Yeni Gelen Ürünler</a></li>
+        </ul>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+
+        <!-- Kategori Başlığı ve Yol -->
+        <div class="category-header">
+            <h2>Masa Gece Lambası Aydınlatma - Ürün Listesi</h2>
+            <div class="breadcrumb">
+                <a href="index.html">Ana Sayfa</a> / <span>Masa Gece Lambası Aydınlatma</span>
+            </div>
+        </div>
+
+        <!-- Ürün Grid (20 Adet Ürün) -->
+        <div class="products-grid" id="productGrid">
+
+            <!-- Ürün 1 -->
+            <a href="urun-detay.html?id=101" class="product-card">
+                <span class="badge-discount">%15 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Dekoratif Şarjlı Dokunmatik Masa Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Dekoratif Şarjlı Dokunmatik Masa Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">280 TL</span>
+                        <span class="current-price">238 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 2 -->
+            <a href="urun-detay.html?id=102" class="product-card">
+                <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=500&auto=format&fit=crop&q=60" class="product-image" alt="3D Gece Lambası Aydede Tasarım">
+                <div class="product-details">
+                    <h4 class="product-title">3D Gece Lambası Aydede Tasarım</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">250 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 3 -->
+            <a href="urun-detay.html?id=103" class="product-card">
+                <span class="badge-discount">%20 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1550684848-fac1c5b4e853?w=500&auto=format&fit=crop&q=60" class="product-image" alt="RGB Renk Değiştiren Kumandalı Gece Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">RGB Renk Değiştiren Kumandalı Gece Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">180 TL</span>
+                        <span class="current-price">144 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 4 -->
+            <a href="urun-detay.html?id=104" class="product-card">
+                <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Mandallı Esnek LED Kitap Okuma Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Mandallı Esnek LED Kitap Okuma Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">120 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 5 -->
+            <a href="urun-detay.html?id=105" class="product-card">
+                <img src="https://images.unsplash.com/photo-1541185933-ef5d8ed016c2?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Astronot Tasarımlı Galaksi Projektör Lamba">
+                <div class="product-details">
+                    <h4 class="product-title">Astronot Tasarımlı Galaksi Projektör Lamba</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">390 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 6 -->
+            <a href="urun-detay.html?id=106" class="product-card">
+                <span class="badge-discount">%10 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1603569283847-f495e860a9b8?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Doğal Çankırı Kaya Tuz Lambası Ahşap Tabanlı">
+                <div class="product-details">
+                    <h4 class="product-title">Doğal Çankırı Kaya Tuz Lambası Ahşap Tabanlı</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">220 TL</span>
+                        <span class="current-price">198 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 7 -->
+            <a href="urun-detay.html?id=107" class="product-card">
+                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Sevimli Mantar Figürlü Silikon Gece Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Sevimli Mantar Figürlü Silikon Gece Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">160 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 8 -->
+            <a href="urun-detay.html?id=108" class="product-card">
+                <img src="https://images.unsplash.com/photo-1563861826100-9cb868fdbe1c?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Pilli ve USB'li Neon Figürlü Masa Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Pilli ve USB'li Neon Figürlü Masa Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">175 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 9 -->
+            <a href="urun-detay.html?id=109" class="product-card">
+                <span class="badge-discount">%25 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Kristal Elmas Yansımalı Akrilik Masa Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Kristal Elmas Yansımalı Akrilik Masa Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">300 TL</span>
+                        <span class="current-price">225 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 10 -->
+            <a href="urun-detay.html?id=110" class="product-card">
+                <img src="https://images.unsplash.com/photo-1517842645767-c639042777db?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Gece Sensörlü Priz Tipi Mini LED Lamba">
+                <div class="product-details">
+                    <h4 class="product-title">Gece Sensörlü Priz Tipi Mini LED Lamba</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">65 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 11 -->
+            <a href="urun-detay.html?id=111" class="product-card">
+                <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Nostaljik Ahşap Ayaklı Abajur Masa Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Nostaljik Ahşap Ayaklı Abajur Masa Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">240 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 12 -->
+            <a href="urun-detay.html?id=112" class="product-card">
+                <span class="badge-discount">%10 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Dönen Yıldızlı Gökyüzü Projektör Gece Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Dönen Yıldızlı Gökyüzü Projektör Gece Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">210 TL</span>
+                        <span class="current-price">189 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 13 -->
+            <a href="urun-detay.html?id=113" class="product-card">
+                <img src="https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500&auto=format&fit=crop&q=60" class="product-image" alt="USB Şarjlı Katlanabilir Ofis Çalışma Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">USB Şarjlı Katlanabilir Ofis Çalışma Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">210 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 14 -->
+            <a href="urun-detay.html?id=114" class="product-card">
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Yumuşak Dokulu Sevimli Kedi Gece Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Yumuşak Dokulu Sevimli Kedi Gece Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">170 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 15 -->
+            <a href="urun-detay.html?id=115" class="product-card">
+                <span class="badge-discount">%20 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=500&auto=format&fit=crop&q=60" class="product-image" alt="3D Cam Küre Işıklı Ahşap Stantlı Gece Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">3D Cam Küre Işıklı Ahşap Stantlı Gece Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">190 TL</span>
+                        <span class="current-price">152 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 16 -->
+            <a href="urun-detay.html?id=116" class="product-card">
+                <img src="https://images.unsplash.com/photo-1461360370896-922624d12aa1?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Edison Ampullü Endüstriyel Retro Masa Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Edison Ampullü Endüstriyel Retro Masa Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">310 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 17 -->
+            <a href="urun-detay.html?id=117" class="product-card">
+                <img src="https://images.unsplash.com/photo-1539185441755-769473a23570?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Tavşan Figürlü Çocuk Odası Gece Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Tavşan Figürlü Çocuk Odası Gece Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">145 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 18 -->
+            <a href="urun-detay.html?id=118" class="product-card">
+                <span class="badge-discount">%30 İndirim</span>
+                <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Alev Efektli Şömine Görünümlü Dekoratif Lamba">
+                <div class="product-details">
+                    <h4 class="product-title">Alev Efektli Şömine Görünümlü Dekoratif Lamba</h4>
+                    <div class="product-price-box">
+                        <span class="old-price">350 TL</span>
+                        <span class="current-price">245 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 19 -->
+            <a href="urun-detay.html?id=119" class="product-card">
+                <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Mimar Tipi Hareketli Aşkın Masa Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Mimar Tipi Hareketli Aşkın Masa Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">270 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <!-- Ürün 20 -->
+            <a href="urun-detay.html?id=120" class="product-card">
+                <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?w=500&auto=format&fit=crop&q=60" class="product-image" alt="Günışığı Yansıtan Sunset Gün Batımı Lambası">
+                <div class="product-details">
+                    <h4 class="product-title">Günışığı Yansıtan Sunset Gün Batımı Lambası</h4>
+                    <div class="product-price-box">
+                        <span class="current-price">180 TL</span>
+                    </div>
+                    <span class="btn-add-cart">Ürünü İncele</span>
+                </div>
+            </a>
+
+            <div class="no-results" id="noResults">Aradığınız kriterlere uygun ürün bulunamadı.</div>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2026 Birlik Oyuncak - Tüm Hakları Saklıdır.
+    </footer>
+
+    <!-- Arama Fonksiyonu -->
+    <script>
+        function filterProducts() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.getElementsByClassName('product-card');
+            let hasVisibleCard = false;
+
+            for (let i = 0; i < cards.length; i++) {
+                const title = cards[i].querySelector('.product-title').innerText.toLowerCase();
+
+                if (title.includes(input)) {
+                    cards[i].style.display = "";
+                    hasVisibleCard = true;
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+
+            const noResults = document.getElementById('noResults');
+            noResults.style.display = hasVisibleCard ? "none" : "block";
+        }
+    </script>
+</body>
+</html>
